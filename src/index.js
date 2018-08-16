@@ -21,7 +21,7 @@ const dbCheck = require('./handlers/dbCheck.js');
 // Code
 const checkInterval = setInterval(() => dbCheck(db, snoowrap), 60 * 1000);
 
-const postStream = snoostream.submissionStream(config['reddit']['subreddit']);
+const postStream = snoostream.submissionStream(config['reddit']['subreddit'], { rate: 5000 });
 
 postStream.on('post', (post) => {
   const id = post.id;
