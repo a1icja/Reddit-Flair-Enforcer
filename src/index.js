@@ -14,7 +14,7 @@ const snoostream = require('./handlers/stream.js')(snoowrap);
 const dbCheck = require('./handlers/dbCheck.js');
 
 // Code
-const checkInterval = setInterval(() => dbCheck(db, snoowrap), 1000);
+const checkInterval = setInterval(() => dbCheck(db, snoowrap), 60 * 1000);
 
 const postStream = snoostream.submissionStream(config['reddit']['subreddit']);
 
