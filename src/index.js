@@ -9,6 +9,7 @@ const db = new enmap({ provider: new enmapLevel({ name: 'cooldowns' }) });
 // Reddit Wrappers
 const snoowrap = new (require('snoowrap'))(config['reddit']['login']);
 const snoostream = require('./handlers/stream.js')(snoowrap);
+snoowrap.config({ requestDelay: 1000, warnings: false });
 
 // Misc. Handlers
 const dbCheck = require('./handlers/dbCheck.js');

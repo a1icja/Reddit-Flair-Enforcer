@@ -9,13 +9,12 @@ module.exports = (db, snoowrap) => {
     if (await post.link_flair_text || await post.link_flair_css_class)
       return db.delete(id);
 
-    await sleep(1000);
     await post.remove();
-    await sleep(1000);
+
     await post.lock();
-    await sleep(1000);
+
     await db.delete(id);
-    await sleep(1000);
+
     await post.reply(
       `**Unfortunately, we've had to remove your post.** 
 ___
@@ -37,10 +36,3 @@ ___
     return;
   });
 };
-
-
-function sleep(ms) {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
-}
