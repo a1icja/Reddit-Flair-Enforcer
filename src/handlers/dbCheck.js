@@ -8,13 +8,16 @@ module.exports = (db, snoowrap) => {
     
     if (await post.link_flair_text || await post.link_flair_css_class)
       return db.delete(id);
-    
-    await db.delete(id);
-    
-    await sleep(1000);
 
+    await sleep(1000);
+    await post.remove();
+    await sleep(1000);
+    await post.lock();
+    await sleep(1000);
+    await db.delete(id);
+    await sleep(1000);
     await post.reply(
-`**Unfortunately, we've had to remove your post.** 
+      `**Unfortunately, we've had to remove your post.** 
 ___
 
 
@@ -31,12 +34,6 @@ ___
 [**Here are our subreddit rules.**](https://www.reddit.com/r/FortNiteBR/wiki/rules) - If you have any queries about this, you can contact us via [Moderator Mail](https://www.reddit.com/message/compose?to=%2Fr%2FFortNiteBR).`
     ).then(c => c.distinguish({ sticky: true }));
 
-    await sleep(1000);
-
-    await post.remove();
-    await sleep(1000);
-    await post.lock();
-    await sleep(1000);
     return;
   });
 };
