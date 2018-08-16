@@ -9,8 +9,10 @@ module.exports = (db, snoowrap) => {
     if (await post.link_flair_text || await post.link_flair_css_class)
       return db.delete(id);
     
-    sleep(1000);
+    await db.delete(id);
     
+    sleep(1000);
+
     await post.reply(
 `**Unfortunately, we've had to remove your post.** 
 ___
@@ -35,8 +37,6 @@ ___
     sleep(1000);
     await post.lock();
     sleep(1000);
-
-    await db.delete(id);
     return;
   });
 };
