@@ -13,7 +13,7 @@ module.exports = (db, snoowrap) => {
 
     await post.lock().catch(() => `ERR: Couldn't lock post | ${id} | ${Date.now().toString()}`);
 
-    await db.delete(id).catch(() => `ERR: Couldn't delete DB entry | ${id} | ${Date.now().toString()}`);
+    await db.delete(id);
 
     await post.reply(
       `**Unfortunately, we've had to remove your post.** 
