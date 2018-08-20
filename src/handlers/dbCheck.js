@@ -9,11 +9,11 @@ module.exports = (db, snoowrap) => {
     if (await post.link_flair_text || await post.link_flair_css_class)
       return db.delete(id);
 
-    await post.remove();
+    await post.remove().catch(() => `ERR: Can't remove post | ${id} | ${Date.now().toString()}`);
 
-    await post.lock();
+    await post.lock().catch(() => `ERR: Couldn't lock post | ${id} | ${Date.now().toString()}`);
 
-    await db.delete(id);
+    await db.delete(id).catch(() => `ERR: Couldn't delete DB entry | ${id} | ${Date.now().toString()}`);
 
     await post.reply(
       `**Unfortunately, we've had to remove your post.** 
@@ -31,7 +31,9 @@ For more information, please read [this post](https://www.reddit.com/r/FortNiteB
 
 ___
 [**Here are our subreddit rules.**](https://www.reddit.com/r/FortNiteBR/wiki/rules) - If you have any queries about this, you can contact us via [Moderator Mail](https://www.reddit.com/message/compose?to=%2Fr%2FFortNiteBR).`
-    ).then(c => c.distinguish({ sticky: true }));
+    ).then(c => c.distinguish({ sticky: true })).catch(() => `ERR: Couldn't reply to post | ${id} | ${Date.now().toString()}`);
+
+    console.log(`Post removed | ${id} | ${Date.now().toString()}`);
 
     return;
   });
