@@ -29,3 +29,7 @@ postStream.on('post', (post) => {
 
   db.set(id, { "id": id, "time": checkTime });
 });
+
+process.on("message", msg => console.log(msg))
+  .on("uncaughtException", err => console.log(err.stack, true))
+  .on("unhandledRejection", err => console.log(err.stack, true));
