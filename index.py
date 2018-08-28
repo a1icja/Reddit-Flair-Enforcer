@@ -61,7 +61,7 @@ class FortniteOverlord:
 
                 self.postStorage.remove(data) # Remove the post from the bot's cache before doing anything, in order to prevent double moderation
 
-                if (post.link_flair_text is None): # Check if the flair doesn't exist
+                if (post.link_flair_text is None or post.link_flair_css_class is None): # Check if the flair doesn't exist
 
                     (post.reply(removalText)).mod.distinguish(how='yes', sticky=True) # Reply with the removal reason and then distinguish/sticky the comment
                     post.mod.remove() # Remove the original post
