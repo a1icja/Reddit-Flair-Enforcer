@@ -4,6 +4,7 @@
     "secret": "",
     "agent": "",
     "username": "",
-    "password": ""
+    "password": "",
+    "subreddits": []
   }
 }

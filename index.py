@@ -21,18 +21,31 @@ For more information, please read [this post](https://www.reddit.com/r/FortNiteB
 
 
 ___
-[**Here are our subreddit rules.**](https://www.reddit.com/r/FortNiteBR/wiki/rules) - If you have any queries about this, you can contact us via [Moderator Mail](https://www.reddit.com/message/compose?to=%2Fr%2FFortNiteBR).
+[**Here are our subreddit rules.**](https://www.reddit.com/r/{}/wiki/rules) - If you have any queries about this, you can contact us via [Moderator Mail](https://www.reddit.com/message/compose?to=%2Fr%2F{}).
 """
 
 class FortniteOverlord:
     def __init__ (self):
         
         self.reddit = self.login() # Run the function to login to reddit
+        
+        print("--- Logged in to Reddit")
 
-        self.postStorage = list() # Initalize the storage for posts
+        self.postStorage = list()  # Initalize the storage for posts
+        
+        self.threadStorage = dict()
 
-        (Thread(target = self.getPosts)).start() # Start getting posts on a seperate thread
-        (Thread(target = self.checkFlair)).start() # Start processing posts on a seperate thread
+        print("--- Storage Initalized")
+
+        for sub in config['reddit']['subreddits']:
+          self.threadStorage[sub] = Thread(target=self.getPosts, args=[sub])
+          self.threadStorage[sub].start()
+        
+        (Thread(target=self.checkFlair)).start()  # Start processing posts on a seperate thread
+
+        print(f"--- {len(self.threadStorage)} Threads Started and Stored")
+
+        print("--- Post Processing Started")
 
     def login(self):
         self.loginTime = time.time() # Define when the bot was logged in
@@ -45,11 +58,11 @@ class FortniteOverlord:
             password=config['reddit']['password']
         )
     
-    def getPosts(self):        
-        for post in self.reddit.subreddit('fortnitebr').stream.submissions(): # Get submissions when posted in specified subreddit
+    def getPosts(self, sub):        
+        for post in self.reddit.subreddit(sub).stream.submissions(): # Get submissions when posted in specified subreddit
             
             if post.created_utc - self.loginTime > 0: # Make sure the post is from after the bot started (Helps prevent double moderation)
-                self.postStorage.append({'key': post.id, 'time': post.created_utc}) # Add post to storage
+                self.postStorage.append({'key': post.id, 'sub': sub, 'time': post.created_utc}) # Add post to storage
     
     def checkFlair(self):
         while True:
@@ -63,7 +76,9 @@ class FortniteOverlord:
 
                 if (post.link_flair_text is None or post.link_flair_css_class is None): # Check if the flair doesn't exist
 
-                    (post.reply(removalText)).mod.distinguish(how='yes', sticky=True) # Reply with the removal reason and then distinguish/sticky the comment
+                    # Reply with the removal reason and then distinguish/sticky the comment
+                    (post.reply(removalText.format(data['sub'], data['sub']))).mod.distinguish(how='yes', sticky=True)
+
                     post.mod.remove() # Remove the original post
                     post.mod.lock() # Lock the original post
 
