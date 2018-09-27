@@ -27,6 +27,8 @@ ___
 class FortniteOverlord:
     def __init__ (self):
         
+        self.loginTime = time.time()  # Define when the bot was logged in
+        
         self.reddit = self.login() # Run the function to login to reddit
         
         print("--- Logged in to Reddit")
@@ -48,8 +50,6 @@ class FortniteOverlord:
         print("--- Post Processing Started")
 
     def login(self):
-        self.loginTime = time.time() # Define when the bot was logged in
-
         return praw.Reddit( # Login to reddit with details
             client_id=config['reddit']['id'],
             client_secret=config['reddit']['secret'],
@@ -77,11 +77,18 @@ class FortniteOverlord:
                 if (post.link_flair_text is None or post.link_flair_css_class is None): # Check if the flair doesn't exist
 
                     # Reply with the removal reason and then distinguish/sticky the comment
-                    (post.reply(removalText.format(data['sub'], data['sub']))).mod.distinguish(how='yes', sticky=True)
+                    try:
+                        (post.reply(removalText.format(data['sub'], data['sub']))).mod.distinguish(how='yes', sticky=True)
 
-                    post.mod.remove() # Remove the original post
-                    post.mod.lock() # Lock the original post
+                        post.mod.remove() # Remove the original post
+                        post.mod.lock() # Lock the original post
 
-                    print('Post Removed: {} | {}'.format(post.id, time.time())) # Log that a post was removed
+                        print('Post Removed: {} | {}'.format(post.id, time.time()))  # Log that a post was removed
+                    except praw.errors.HTTPException:
+                        print('HTTP Error Received. Relogging.')
+
+                        time.sleep(5)
+
+                        self.login()
 
 FortniteOverlord()
