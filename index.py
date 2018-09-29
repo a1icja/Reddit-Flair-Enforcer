@@ -66,29 +66,25 @@ class FortniteOverlord:
     
     def checkFlair(self):
         while True:
-            filtered = filter(lambda x: x['time'] + 30 * 60 - time.time() < 0, self.postStorage) # Filter out all posts that are not older than 30 minutes
+            try:
+                filtered = filter(lambda x: x['time'] + 30 * 60 - time.time() < 0, self.postStorage) # Filter out all posts that are not older than 30 minutes
 
-            for data in filtered:
-                
-                post = self.reddit.submission(data['key']) # Get the submission from reddit
+                for data in filtered:
 
-                self.postStorage.remove(data) # Remove the post from the bot's cache before doing anything, in order to prevent double moderation
+                    post = self.reddit.submission(data['key']) # Get the submission from reddit
 
-                if (post.link_flair_text is None or post.link_flair_css_class is None): # Check if the flair doesn't exist
+                    self.postStorage.remove(data) # Remove the post from the bot's cache before doing anything, in order to prevent double moderation
 
-                    # Reply with the removal reason and then distinguish/sticky the comment
-                    try:
+                    if (post.link_flair_text is None or post.link_flair_css_class is None): # Check if the flair doesn't exist
+
+                        # Reply with the removal reason and then distinguish/sticky the comment
                         (post.reply(removalText.format(data['sub'], data['sub']))).mod.distinguish(how='yes', sticky=True)
 
                         post.mod.remove() # Remove the original post
                         post.mod.lock() # Lock the original post
 
                         print('Post Removed: {} | {}'.format(post.id, time.time()))  # Log that a post was removed
-                    except praw.errors.HTTPException:
-                        print('HTTP Error Received. Relogging.')
-
-                        time.sleep(5)
-
-                        self.login()
+            except Exception as e:
+                print(f'Exception: {e}')
 
 FortniteOverlord()
