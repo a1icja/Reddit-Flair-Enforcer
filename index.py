@@ -65,8 +65,9 @@ class FortniteOverlord:
                 self.postStorage.append({'key': post.id, 'sub': sub, 'time': post.created_utc}) # Add post to storage
     
     def checkFlair(self):
-        while True:
-            try:
+        try:
+            while True:
+            
                 filtered = filter(lambda x: x['time'] + 30 * 60 - time.time() < 0, self.postStorage) # Filter out all posts that are not older than 30 minutes
 
                 for data in filtered:
@@ -84,7 +85,8 @@ class FortniteOverlord:
                         post.mod.lock() # Lock the original post
 
                         print('Post Removed: {} | {}'.format(post.id, time.time()))  # Log that a post was removed
-            except Exception as e:
-                print(f'Exception: {e}')
+        except Exception as e:
+            print(f'Exception: {e}')
+            pass
 
 FortniteOverlord()
