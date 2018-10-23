@@ -1,4 +1,5 @@
 import praw
+from prawcore import RequestException
 import time
 import json
 from threading import Thread
@@ -58,11 +59,14 @@ class FortniteOverlord:
             password=config['reddit']['password']
         )
     
-    def getPosts(self, sub):        
-        for post in self.reddit.subreddit(sub).stream.submissions(): # Get submissions when posted in specified subreddit
-            
-            if post.created_utc - self.loginTime > 0: # Make sure the post is from after the bot started (Helps prevent double moderation)
-                self.postStorage.append({'key': post.id, 'sub': sub, 'time': post.created_utc}) # Add post to storage
+    def getPosts(self, sub):   
+        try:     
+            for post in self.reddit.subreddit(sub).stream.submissions(): # Get submissions when posted in specified subreddit
+
+                if post.created_utc - self.loginTime > 0: # Make sure the post is from after the bot started (Helps prevent double moderation)
+                    self.postStorage.append({'key': post.id, 'sub': sub, 'time': post.created_utc})  # Add post to storage
+        except RequestException:
+            continue
     
     def checkFlair(self):
         try:
@@ -85,8 +89,7 @@ class FortniteOverlord:
                         post.mod.lock() # Lock the original post
 
                         print('Post Removed: {} | {}'.format(post.id, time.time()))  # Log that a post was removed
-        except Exception as e:
-            print(f'Exception: {e}')
-            pass
+        except RequestException:
+            continue
 
 FortniteOverlord()
