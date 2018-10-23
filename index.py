@@ -66,7 +66,7 @@ class FortniteOverlord:
                 if post.created_utc - self.loginTime > 0: # Make sure the post is from after the bot started (Helps prevent double moderation)
                     self.postStorage.append({'key': post.id, 'sub': sub, 'time': post.created_utc})  # Add post to storage
         except RequestException:
-            continue
+            print(f'Exception: {e}')
     
     def checkFlair(self):
         try:
@@ -90,6 +90,6 @@ class FortniteOverlord:
 
                         print('Post Removed: {} | {}'.format(post.id, time.time()))  # Log that a post was removed
         except RequestException:
-            continue
+            print(f'Exception: {e}')
 
 FortniteOverlord()
