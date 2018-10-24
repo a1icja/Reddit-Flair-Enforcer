@@ -1,5 +1,5 @@
 import praw
-from prawcore import RequestException
+from prawcore import PrawcoreException
 import time
 import json
 from threading import Thread
@@ -65,7 +65,7 @@ class FortniteOverlord:
 
                 if post.created_utc - self.loginTime > 0: # Make sure the post is from after the bot started (Helps prevent double moderation)
                     self.postStorage.append({'key': post.id, 'sub': sub, 'time': post.created_utc})  # Add post to storage
-        except Exception as e:
+        except PrawcoreException as e:
             print(f'Exception: {e}')
     
     def checkFlair(self):
@@ -88,7 +88,7 @@ class FortniteOverlord:
                         post.mod.lock() # Lock the original post
 
                         print('Post Removed: {} | {}'.format(post.id, time.time()))  # Log that a post was removed
-            except Exception as e:
+            except PrawcoreException as e:
                 print(f'Exception: {e}')
 
 FortniteOverlord()
