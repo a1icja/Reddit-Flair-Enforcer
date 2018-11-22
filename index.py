@@ -104,7 +104,7 @@ class TiltedTowersBot:
                         print('Post Removed (No Flair): {} | {}'.format(post.id, time.time()))  # Log that a post was removed
 
                     # Check if post is on r/FortniteBR, has suggestion flair, and is a link post
-                    elif (data["sub"] is "fortnitebr" and post.post_hint and post.link_flair_css_class is "suggestion"):
+                    elif (data["sub"] is "fortnitebr" and post.domain is not "self.FortNiteBR" and post.link_flair_css_class is "suggestion"):
 
                         # Reply with the suggestion removal reason and then distinguish/sticky the comment
                         (post.reply(suggestionRemovalText.format(data['sub'], data['sub']))).mod.distinguish(how='yes', sticky=True)
