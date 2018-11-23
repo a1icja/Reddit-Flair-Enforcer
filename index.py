@@ -104,6 +104,9 @@ class TiltedTowersBot:
                         print('Post Removed (No Flair): {} | {}'.format(post.id, time.time()))  # Log that a post was removed
 
                     # Check if post is on r/FortniteBR, has suggestion flair, and is a link post
+
+                    print('Check Reached: {} ({}, {}, {})'.format(post.id, post.subreddit.display_name, post.domain, post.link_flair_css_class))
+                    
                     elif (post.subreddit.display_name is "FortNiteBR" and post.domain is not "self.FortNiteBR" and post.link_flair_css_class is "suggestion"):
 
                         # Reply with the suggestion removal reason and then distinguish/sticky the comment
@@ -114,6 +117,8 @@ class TiltedTowersBot:
 
                         print('Post Removed (Link Suggestion): {} | {}'.format(post.id, time.time()))  # Log that a post was removed
 
+                    print('Check Passed: {} ({}, {}, {})'.format(post.id, post.subreddit.display_name, post.domain, post.link_flair_css_class))
+                    
             except PrawcoreException as e:
                 print(f'Exception: {e}')
 
