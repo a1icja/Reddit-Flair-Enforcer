@@ -35,23 +35,18 @@ ___
 [**Here are our subreddit rules.**](https://www.reddit.com/r/{}/wiki/rules) - If you have any queries about this, you can contact us via [Moderator Mail](https://www.reddit.com/message/compose?to=%2Fr%2F{})
 """
 
-with open('./config.json') as config_file:
-    config = json.load(config_file)
-
-
 class TiltedTowersBot:
     def __init__(self):
         self.start_time = time.time()
         self.reddit = self.login()
         print('--- logged in to reddit')
 
-        self.post_storage = list()
-        self.thread_storage = dict()
+        self.post_storage = []
+        self.thread_storage = {}
         print('--- storage initalized')
 
         for sub in config['reddit']['subreddits']:
-            self.thread_storage[sub] = Thread(
-                target=self.get_posts, args=[sub])
+            self.thread_storage[sub] = Thread(target=self.get_posts, args=[sub])
             self.thread_storage[sub].start()
 
         Thread(target=self.check_flair).start()
@@ -102,4 +97,7 @@ class TiltedTowersBot:
                 print(f'exception: {e}')
 
 
-TiltedTowersBot()
+if __name__ == '__main__':
+    with open('./config.json') as config_file:
+        config = json.load(config_file)
+    TiltedTowersBot()
