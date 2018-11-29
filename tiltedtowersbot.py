@@ -21,20 +21,6 @@ For more information, please read [this post](https://www.reddit.com/r/FortNiteB
 ___
 [**Here are our subreddit rules.**](https://www.reddit.com/r/{}/wiki/rules) - If you have any queries about this, you can contact us via [Moderator Mail](https://www.reddit.com/message/compose?to=%2Fr%2F{})."""
 
-suggestion_removal = """
-**Unfortunately, we've had to remove your post.**
-___
-
-
-### Suggestion Link Posts
-
-We do not allow suggestions to be link posts on /r/FortniteBR. We require them to be made as text posts with context to describe your suggestion. Sites such as Gfycat, Streamable or Imgur can be used to upload images or videos in your text post.
-
-
-___
-[**Here are our subreddit rules.**](https://www.reddit.com/r/{}/wiki/rules) - If you have any queries about this, you can contact us via [Moderator Mail](https://www.reddit.com/message/compose?to=%2Fr%2F{})
-"""
-
 class TiltedTowersBot:
     def __init__(self):
         self.start_time = time.time()
@@ -84,12 +70,6 @@ class TiltedTowersBot:
                         post.mod.remove()
                         post.mod.lock()
                         print(f'post removed (no flair): {post.id} | {time.time()}')
-
-                    elif post.subreddit.display_name == 'FortNiteBR' and post.is_self == False and post.link_flair_css_class == 'suggestion':
-                        post.reply(suggestion_removal.format(data['sub'], data['sub'])).mod.distinguish(how='yes', sticky=True)
-                        post.mod.remove()
-                        post.mod.lock()
-                        print(f'post removed (link suggestion): {post.id} | {time.time()}')
                     else:
                         print(f'all checks passed: {post.id} ({post.subreddit.display_name}, {post.domain}, {post.link_flair_css_class})')
 
