@@ -8,20 +8,10 @@ no_flair_removal = """
 **Unfortunately, we've had to remove your post.**
 ___
 
-
-### Post Flair Guidelines
-
-We require all users to set a post flair for their own post. There is a 30 minute grace period, and this has passed for this post. 
-
-Don't know how to flair your post? Click [here](http://imgur.com/a/m3FI3) to view this helpful guide on how to flair your post. 
-
-For more information, please read [this post](https://www.reddit.com/r/FortNiteBR/comments/8bznpy/state_of_the_subreddit_new_moderators_survey/).
-
-
 ___
 [**Here are our subreddit rules.**](https://www.reddit.com/r/{}/wiki/rules) - If you have any queries about this, you can contact us via [Moderator Mail](https://www.reddit.com/message/compose?to=%2Fr%2F{})."""
 
-class TiltedTowersBot:
+class RedditFlairEnforcer:
     def __init__(self):
         self.start_time = time.time()
         self.reddit = self.login()
@@ -80,4 +70,4 @@ class TiltedTowersBot:
 if __name__ == '__main__':
     with open('./config.json') as config_file:
         config = json.load(config_file)
-    TiltedTowersBot()
+    RedditFlairEnforcer()
